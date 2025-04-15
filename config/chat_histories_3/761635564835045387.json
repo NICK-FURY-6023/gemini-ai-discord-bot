@@ -214,5 +214,131 @@
         }
       ]
     }
+  ],
+  "1361694822129336440": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hey there! What can I help you with?\n"
+        }
+      ]
+    }
+  ],
+  "1361695576667721983": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Nodes: [\n        {\n            name: '35.221.56.124', // Node Name\n            url: '35.221.56.124:4027', //  Node Ip And : Port\n            auth: 'reedrousisgayy', // Node Password\n            secure: false\n        }\n    ],\n\nCan you add 2 more node"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "```javascript\nNodes: [\n        {\n            name: '35.221.56.124', // Node Name\n            url: '35.221.56.124:4027', //  Node Ip And : Port\n            auth: 'reedrousisgayy', // Node Password\n            secure: false\n        },\n        {\n            name: 'Node2', // Example Node Name - Change this!\n            url: '127.0.0.1:4027', // Example Node IP and Port - Change this!\n            auth: 'password2', // Example Node Password - Change this!\n            secure: false\n        },\n        {\n            name: 'Node3', // Example Node Name - Change this!\n            url: '127.0.0.1:4028', // Example Node IP and Port - Change this!\n            auth: 'password3', // Example Node Password - Change this!\n            secure: false\n        }\n    ],\n```\n\n**Important:**\n\n*   **Replace the example values** for `name`, `url`, and `auth` with the actual information for your nodes.\n*   **`name`:**  Should be a unique identifier for each node.\n*   **`url`:** The correct IP address and port where the node is accessible.\n*   **`auth`:** The correct password for the node.  Make sure this is strong and secure!\n*   **`secure`:** If your node uses HTTPS, set this to `true`. Otherwise, leave it as `false`.\n\nI've added two example nodes.  Make sure to change the placeholder values to the correct details for your setup.\n"
+        }
+      ]
+    }
+  ],
+  "1361695966830526606": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Can you write a story about the night fury"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "The wind howled a mournful dirge across the jagged cliffs of Berk, a sound almost as chilling as the legend itself. Stoick the Vast, chief of the Hooligan tribe, gripped the railing of his watchtower, his gaze fixed on the storm-tossed sea. Tonight was a night for dragons, a night when the shadows danced with the promise of fire and fury. But it wasn't the Gronkles or the Deadly Nadders that worried him; it was the whisper, the fleeting glimpse, the terror that only one creature could inspire: the Night Fury.\n\nFor generations, the Night Fury had been a myth, a nightmare spun from sailor's yarns and fueled by the terrifying sonic boom that ripped through the sky before its fiery assault. No one had ever truly seen one, not close enough to live. They were described as living shadows, creatures of pure speed and destruction.\n\nSuddenly, a streak of violet lightning illuminated the sky. A sound, unlike any he had ever heard, tore through the storm. Not a roar, but a high-pitched, almost mournful cry, followed by the familiar, deafening shriek of the Night Fury's plasma blast. This was different. It wasn't aimed at the village. It was further out to sea.\n\nStoick squinted, his gut twisting with a strange premonition. Something was wrong. He barked orders, gathering a search party despite the raging storm. As they sailed into the tempest, the air grew heavy with the smell of ozone and something else… something metallic and strangely sweet.\n\nThey found it crashed on a small, rocky islet – not a ship, but a strange, winged contraption, twisted and broken. And beside it, curled into a shivering ball, was a dragon unlike any they had ever seen. It was black as midnight, sleek and powerful, but its scales were torn, one wing was bent at an unnatural angle, and its eyes, usually described as burning coals, were wide with pain and confusion.\n\nThis was no monster. This was a creature in distress.\n\nStoick, a man hardened by years of dragon raids and loss, felt a flicker of something he hadn’t felt in a long time: pity. He cautiously approached the dragon, his axe held low, not in threat, but in a strange offering of peace. The Night Fury, expecting a blow, flinched, letting out a weak, whimpering sound.\n\nFor the first time, Stoick truly saw the creature. He saw the fear in its eyes, the vulnerability hidden beneath the legend. He saw the injured wing, the pain etched on its face. And in that moment, something shifted within him. The fear and hatred he had harbored for dragons his entire life began to crumble.\n\nHe knelt, extending a hand slowly, palm open. The Night Fury hesitated, its nostrils flaring. Then, with a cautious curiosity, it reached out and touched its snout to Stoick's hand. A jolt of connection, of understanding, passed between them.\n\nThe storm began to subside, and as the first rays of dawn broke over the horizon, Stoick knew that Berk, and his own heart, would never be the same. The legend of the Night Fury had been rewritten, not with fire and fear, but with compassion and the promise of a new beginning. He knew the path ahead would be fraught with danger, that convincing his tribe would be a monumental task, but he also knew that he couldn't leave this creature to die. This injured Night Fury, he sensed, held the key to a future he had never dared to imagine: a future where humans and dragons could coexist, not as enemies, but as allies. And that future, he realized, was worth fighting for.\n"
+        }
+      ]
+    }
+  ],
+  "1361696332619845746": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Write full story"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "The wind howled a mournful dirge across the jagged cliffs of Berk, a sound almost as chilling as the legend itself. Stoick the Vast, chief of the Hooligan tribe, gripped the railing of his watchtower, his gaze fixed on the storm-tossed sea. Tonight was a night for dragons, a night when the shadows danced with the promise of fire and fury. But it wasn't the Gronkles or the Deadly Nadders that worried him; it was the whisper, the fleeting glimpse, the terror that only one creature could inspire: the Night Fury.\n\nFor generations, the Night Fury had been a myth, a nightmare spun from sailor's yarns and fueled by the terrifying sonic boom that ripped through the sky before its fiery assault. No one had ever truly seen one, not close enough to live. They were described as living shadows, creatures of pure speed and destruction.\n\nSuddenly, a streak of violet lightning illuminated the sky. A sound, unlike any he had ever heard, tore through the storm. Not a roar, but a high-pitched, almost mournful cry, followed by the familiar, deafening shriek of the Night Fury's plasma blast. This was different. It wasn't aimed at the village. It was further out to sea.\n\nStoick squinted, his gut twisting with a strange premonition. Something was wrong. He barked orders, gathering a search party despite the raging storm. As they sailed into the tempest, the air grew heavy with the smell of ozone and something else… something metallic and strangely sweet.\n\nThey found it crashed on a small, rocky islet – not a ship, but a strange, winged contraption, twisted and broken. And beside it, curled into a shivering ball, was a dragon unlike any they had ever seen. It was black as midnight, sleek and powerful, but its scales were torn, one wing was bent at an unnatural angle, and its eyes, usually described as burning coals, were wide with pain and confusion.\n\nThis was no monster. This was a creature in distress.\n\nStoick, a man hardened by years of dragon raids and loss, felt a flicker of something he hadn’t felt in a long time: pity. He cautiously approached the dragon, his axe held low, not in threat, but in a strange offering of peace. The Night Fury, expecting a blow, flinched, letting out a weak, whimpering sound.\n\nFor the first time, Stoick truly saw the creature. He saw the fear in its eyes, the vulnerability hidden beneath the legend. He saw the injured wing, the pain etched on its face. And in that moment, something shifted within him. The fear and hatred he had harbored for dragons his entire life began to crumble.\n\nHe knelt, extending a hand slowly, palm open. The Night Fury hesitated, its nostrils flaring. Then, with a cautious curiosity, it reached out and touched its snout to Stoick's hand. A jolt of connection, of understanding, passed between them.\n\nThe storm began to subside, and as the first rays of dawn broke over the horizon, Stoick knew that Berk, and his own heart, would never be the same. The legend of the Night Fury had been rewritten, not with fire and fear, but with compassion and the promise of a new beginning. He knew the path ahead would be fraught with danger, that convincing his tribe would be a monumental task, but he also knew that he couldn't leave this creature to die. This injured Night Fury, he sensed, held the key to a future he had never dared to imagine: a future where humans and dragons could coexist, not as enemies, but as allies. And that future, he realized, was worth fighting for.\n\nBack on Berk, news of Stoick’s discovery spread like wildfire. Fear mingled with disbelief. How could their chief, the dragon slayer, bring home a Night Fury? Whispers of weakness and madness circulated amongst the villagers. Stoick ignored them, focusing on the task at hand: tending to the injured dragon.\n\nHe named him Shade, for the darkness of his scales and the shadow of fear that still clung to him. He assigned Gobber, the village blacksmith, to craft a prosthetic wing for Shade, a task that was met with grumbling and skepticism, but ultimately accepted out of loyalty to Stoick.\n\nThe process was slow and painful. Shade was wary of the humans, hissing and snapping at anyone who came too close. But Stoick persisted, offering him fish and speaking to him in a soothing voice. Slowly, Shade began to trust him. He allowed Stoick to clean his wounds, to apply soothing herbs, and even to tentatively touch his injured wing.\n\nAs Shade healed, Stoick learned more about him. He discovered that Shade was intelligent and playful, with a mischievous streak and a deep sense of loyalty. He learned that Shade’s fiery plasma blasts were not weapons of destruction, but a means of communication, a way of expressing his emotions.\n\nMeanwhile, young Hiccup, Stoick’s son, observed the unfolding events with fascination. He had always been an outcast, more interested in inventions and dragons than in fighting. He saw in Shade not a monster, but a magnificent creature misunderstood. He began to sneak into the cove where Shade was being kept, offering him fish and sharing stories.\n\nShade, initially distrustful, found himself drawn to Hiccup’s gentle nature and unwavering curiosity. He allowed Hiccup to ride on his back, soaring through the skies above Berk, a symbol of the burgeoning friendship between humans and dragons.\n\nBut the peace was fragile. The other villagers remained skeptical and fearful. They saw Shade as a wild beast, a danger to their way of life. One day, a group of young Vikings, fueled by fear and ignorance, attempted to capture Shade.\n\nHiccup, witnessing the attack, intervened, protecting Shade from harm. The Vikings, enraged, turned on Hiccup, accusing him of treason. Stoick, arriving on the scene, was torn between his loyalty to his tribe and his growing affection for Shade.\n\nHe made a choice. He stood beside Hiccup, defending him against the accusations. He declared that Shade was no longer a threat, but a friend, an ally. He urged the villagers to open their minds, to see the world through new eyes.\n\nThe villagers were hesitant, but Stoick's unwavering conviction swayed them. One by one, they began to accept Shade. They saw the joy he brought to Hiccup, the protection he offered to Berk, the loyalty he showed to Stoick.\n\nFinally, the day came when Shade, fully healed, prepared to leave Berk. He had to return to his own kind, to the skies from whence he came. Stoick and Hiccup stood on the beach, watching as Shade soared into the heavens, his black silhouette disappearing into the clouds.\n\nBut Shade didn't stay gone forever. He returned, bringing with him a flock of other dragons, creatures of all shapes and sizes, each with their own unique personalities and abilities. He had shown them that humans were not monsters, that there was a place for peace and understanding.\n\nBerk became a haven for dragons, a place where humans and dragons lived side by side, protecting each other from the dangers of the world. Stoick, once the dragon slayer, became a champion of peace, a bridge between two worlds. And Hiccup, the outcast, became a hero, the first of the dragon riders, soaring through the skies with his friend Shade, a symbol of the enduring bond between humans and dragons. The legend of the Night Fury was not a tale of terror, but a testament to the power of compassion, understanding, and the courage to see the world in a new light. And it all started on a stormy night, with a broken dragon and a chief who dared to open his heart.\n"
+        }
+      ]
+    }
+  ],
+  "1361696795058503681": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "write a story about night fury"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "The island of Drageholm was a whisper on the wind, a legend painted in sea foam and shrouded in perpetual mist. Sailors spoke of its jagged peaks that clawed at the sky, of caves that echoed with the rumble of sleeping giants, and most terrifying of all, of the shadow that haunted its skies – the Night Fury.\n\nNo one had ever landed on Drageholm and lived to tell the tale. Ships that ventured too close vanished without a trace, leaving behind only swirling debris and a lingering scent of ozone. The only warning was the high-pitched shriek, a sound that promised swift and fiery annihilation.\n\nAnya, a young cartographer with a thirst for the unknown and a spirit as untamed as the sea itself, didn’t believe the legends. To her, Drageholm was a challenge, an unexplored frontier. Driven by scientific curiosity and a burning desire to prove the old tales wrong, she secured passage on the *Albatross*, a sturdy vessel crewed by grizzled sailors who were more superstitious than brave.\n\nAs they approached Drageholm, a dense fog rolled in, swallowing the ship whole. The sailors muttered prayers, their faces pale with fear. Anya, however, stood at the bow, her eyes scanning the swirling mist, her heart pounding with anticipation.\n\nSuddenly, the air crackled with electricity. A sound, like a whip cracking in the heavens, ripped through the fog. The *Albatross* shuddered, and a section of the deck burst into flames. The sailors screamed, abandoning their posts in a frenzy of terror.\n\nAnya, however, remained calm. She saw it then, a fleeting glimpse of black against the grey, a shape that moved with impossible speed and grace. It was the Night Fury.\n\nInstead of running, Anya reached into her satchel and pulled out her notebook and charcoal. She had to record everything, to document the legendary creature before it disappeared.\n\nThe Night Fury circled the ship, its glowing green eyes piercing the fog. It fired another plasma blast, narrowly missing the mast. The sailors cowered below deck, convinced their end was near.\n\nAnya, ignoring the danger, began to sketch. She captured the sleek lines of the dragon’s body, the sharp angles of its wings, the fierce intelligence in its eyes. As she sketched, she noticed something strange. The Night Fury’s movements seemed… hesitant. It wasn’t attacking with the ruthless efficiency the legends described.\n\nSuddenly, the Night Fury landed on the deck, its powerful claws scraping against the wood. It was larger than Anya had imagined, its scales gleaming like polished obsidian. It hissed, a sound that resonated deep within her chest.\n\nInstead of running, Anya held out her hand, palm open, just as she had seen illustrated in ancient texts about dragon taming. The Night Fury stared at her hand, its head cocked to one side. Then, to Anya's astonishment, it lowered its head and sniffed her outstretched palm.\n\nShe felt a jolt of connection, a spark of understanding. This was no mindless beast, but a sentient creature, capable of curiosity and perhaps even… trust.\n\nOver the next few days, Anya remained on the *Albatross*, which had become stranded near Drageholm. She communicated with the Night Fury, learning its language of clicks, whistles, and growls. She discovered that its name was Obsidian, for the volcanic rock that formed its home.\n\nShe learned that Obsidian was not a guardian of Drageholm, but a protector. He defended the island not from invaders, but from a volcanic entity that threatened to erupt and destroy the delicate ecosystem. The plasma blasts were not weapons, but a way to control the flow of magma.\n\nThe other sailors, slowly emerging from their fear, watched Anya with a mixture of awe and suspicion. They saw the bond that had formed between her and Obsidian, the respect they showed for each other.\n\nFinally, the day came when the *Albatross* was repaired and ready to sail. Anya knew she had to leave Drageholm, but she couldn't bear to leave Obsidian behind.\n\nShe climbed onto Obsidian’s back, and together they soared into the sky, circling the island one last time. As they flew, Anya made a promise to Obsidian, a promise to return and help him protect his home.\n\nWhen the *Albatross* returned to port, Anya was no longer just a cartographer. She was a storyteller, a bridge between two worlds. She told the world about Obsidian, about the true nature of Drageholm, about the power of understanding and the possibility of coexistence.\n\nThe legends of the Night Fury were rewritten, not with fear and fire, but with respect and wonder. And Anya, the young cartographer who dared to believe in the impossible, became a symbol of hope, a reminder that even the most terrifying creatures can be understood, and that even the most desolate places can hold the key to a brighter future. The island of Drageholm was still a whisper on the wind, but now, it was a whisper of hope, a testament to the enduring power of human curiosity and the unwavering bond between humans and dragons.\n"
+        }
+      ]
+    }
+  ],
+  "1361697967144308956": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Write text in embed"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Okay, I'll provide the text as if it's designed for a Discord embed. I'll focus on keeping it concise and engaging, with a clear structure. Let me know if you want a specific style or theme!\n\nHere are a few options, ranging from short and sweet to more descriptive:\n\n**Option 1: Short & Mysterious**\n\n```\n**Title:** The Shadow of Drageholm\n\n**Description:** A whisper on the wind... a legend in the mist... The Night Fury awaits. Dare to uncover the truth?\n```\n\n**Option 2: More Descriptive**\n\n```\n**Title:** Drageholm & The Night Fury\n\n**Description:** Explore the secrets of Drageholm, a legendary island guarded by the fearsome Night Fury. Unravel the mysteries, challenge the legends, and discover a truth hidden in the shadows. What awaits you in the mist?\n```\n\n**Option 3: Focused on Anya's Journey**\n\n```\n**Title:** Anya's Discovery: A Night Fury's Secret\n\n**Description:** Cartographer Anya dared to challenge the legends of Drageholm. She found not a monster, but a protector. Journey with her to uncover the truth behind the Night Fury and the secrets of a hidden island.\n```\n\n**Option 4: Action-Oriented**\n\n```\n**Title:** Face the Fury!\n\n**Description:** Drageholm is shrouded in legend, ruled by the Night Fury! Will you succumb to fear, or uncover the truth behind the dragon's fiery reign? Adventure awaits!\n```\n\nTo make it even better, tell me:\n\n*   **What is the overall tone you're going for?** (Mysterious, adventurous, heartwarming, etc.)\n*   **What is the most important thing you want people to take away from the embed?** (The mystery of the island, the bravery of Anya, the power of understanding, etc.)\n*   **Is there a call to action?** (e.g., \"Join the adventure!\", \"Learn more!\", \"Discuss the legend!\")\n\nOnce I have that, I can tailor the embed text to be perfect for your needs!\n"
+        }
+      ]
+    }
+  ],
+  "1361698050359164949": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Okay, I'll provide the text as if it's designed for a Discord embed. I'll focus on keeping it concise and engaging, with a clear structure. Let me know if you want a specific style or theme!\n\nHere are a few options, ranging from short and sweet to more descriptive:\n\nOption 1: Short & Mysterious\n\n**Title:** The Shadow of Drageholm\n\n**Description:** A whisper on the wind... a legend in the mist... The Night Fury awaits. Dare to uncover the truth?\n\n\nOption 2: More Descriptive\n\n**Title:** Drageholm & The Night Fury\n\n**Description:** Explore the secrets of Drageholm, a legendary island guarded by the fearsome Night Fury. Unravel the mysteries, challenge the legends, and discover a truth hidden in the shadows. What awaits you in the mist?\n\n\nOption 3: Focused on Anya's Journey\n\n**Title:** Anya's Discovery: A Night Fury's Secret\n\n**Description:** Cartographer Anya dared to challenge the legends of Drageholm. She found not a monster, but a protector. Journey with her to uncover the truth behind the Night Fury and the secrets of a hidden island.\n\n\nOption 4: Action-Oriented\n\n**Title:** Face the Fury!\n\n**Description:** Drageholm is shrouded in legend, ruled by the Night Fury! Will you succumb to fear, or uncover the truth behind the dragon's fiery reign? Adventure awaits!\n\n\nTo make it even better, tell me:\n\n*   What is the overall tone you're going for? (Mysterious, adventurous, heartwarming, etc.)\n*   What is the most important thing you want people to take away from the embed? (The mystery of the island, the bravery of Anya, the power of understanding, etc.)\n*   Is there a call to action? (e.g., \"Join the adventure!\", \"Learn more!\", \"Discuss the legend!\")\n\nOnce I have that, I can tailor the embed text to be perfect for your needs!"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "You've essentially repeated your previous request. Please provide the additional information I asked for so I can tailor the embed text to your specific needs. I need to know:\n\n*   **Tone:** (Mysterious, adventurous, heartwarming, etc.)\n*   **Key Takeaway:** (Mystery, bravery, understanding, etc.)\n*   **Call to Action:** (Join, learn, discuss, etc.)\n\nOnce I have that, I can give you a perfect Discord embed text!\n"
+        }
+      ]
+    }
   ]
 }

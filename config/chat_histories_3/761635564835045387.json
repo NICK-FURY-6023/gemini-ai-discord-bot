@@ -1,0 +1,218 @@
+{
+  "1361287979858919475": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hello! How can I help you today?\n"
+        }
+      ]
+    }
+  ],
+  "1361288174277492869": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "htrety"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "I'm sorry, I didn't understand. Can you please rephrase your request?\n"
+        }
+      ]
+    }
+  ],
+  "1361290979797372970": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "\n\n[`message.txt` File Content]:\n```\nrequire('dotenv').config();\r\nconst { Client, IntentsBitField } = require('discord.js');\r\nconst { OpenAI } = require('openai');\r\nconst { GoogleGenerativeAI } = require('@google/generative-ai');\r\nconst {\r\n  joinVoiceChannel,\r\n  createAudioPlayer,\r\n  createAudioResource,\r\n  AudioPlayerStatus,\r\n  VoiceConnectionStatus\r\n} = require('@discordjs/voice');\r\nconst fs = require('fs');\r\nconst gTTS = require('gtts');\r\nconst path = require('path');\r\n\r\n// Discord client setup\r\nconst client = new Client({\r\n  intents: [\r\n    IntentsBitField.Flags.Guilds,\r\n    IntentsBitField.Flags.GuildMessages,\r\n    IntentsBitField.Flags.MessageContent,\r\n    IntentsBitField.Flags.GuildVoiceStates\r\n  ],\r\n});\r\n\r\nconst openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });\r\nconst genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);\r\nconst model = genAI.getGenerativeModel({ model: \"gemini-2.0-flash\" });\r\n\r\n\r\nconst voiceChannelId = process.env.VOICE_CHANNEL_ID;\r\nlet connection;\r\n\r\nclient.once('ready', async () => {\r\n  console.log('🟢 VAYU AI BOT is online! (Fallback: Gemini)');\r\n  try {\r\n    const channel = await client.channels.fetch(voiceChannelId);\r\n    if (!channel || channel.type !== 2) throw new Error('❌ Invalid voice channel ID');\r\n\r\n    connection = joinVoiceChannel({\r\n      channelId: voiceChannelId,\r\n      guildId: channel.guild.id,\r\n      adapterCreator: channel.guild.voiceAdapterCreator,\r\n      selfDeaf: false\r\n    });\r\n\r\n    connection.on(VoiceConnectionStatus.Ready, () =>\r\n      console.log('✅ Voice channel connected.')\r\n    );\r\n  } catch (err) {\r\n    console.error('🔴 Voice channel error:', err.message);\r\n  }\r\n});\r\n\r\nconst filterMessages = (messages) =>\r\n  messages\r\n    .filter((msg) => !msg.author.bot && !msg.content.startsWith('!'))\r\n    .map((msg) => ({\r\n      role: msg.author.id === client.user.id ? 'assistant' : 'user',\r\n      content: msg.content,\r\n      username: msg.author.username\r\n    }));\r\n\r\nasync function getOpenAIResponse(sortedMessages) {\r\n  const conversation = [\r\n    {\r\n      role: 'system',\r\n      content: \"You're a funny, sarcastic Discord assistant. Keep replies under 5 sentences.\"\r\n    },\r\n    ...sortedMessages.map((msg) => ({\r\n      role: msg.role,\r\n      content: msg.content\r\n    }))\r\n  ];\r\n\r\n  const res = await openai.chat.completions.create({\r\n    model: 'gpt-3.5-turbo',\r\n    messages: conversation,\r\n    max_tokens: 200\r\n  });\r\n\r\n  return res.choices[0].message.content;\r\n}\r\n\r\nasync function getGeminiResponse(sortedMessages) {\r\n  const prompt = sortedMessages.map((msg) => `${msg.username}: ${msg.content}`).join('\\n');\r\n  const result = await geminiModel.generateContent({\r\n    contents: [\r\n      {\r\n        parts: [\r\n          {\r\n            text: `You're a funny, sarcastic assistant in a Discord server. Keep responses under 5 sentences.\\n\\n${prompt}\\n\\nAssistant:`\r\n          }\r\n        ]\r\n      }\r\n    ]\r\n  });\r\n\r\n  return (await result.response).text();\r\n}\r\n\r\nasync function playResponse(text, message, aiUsed) {\r\n  const filePath = path.join(__dirname, 'reply.mp3');\r\n  const tts = new gTTS(text, 'en');\r\n\r\n  tts.save(filePath, () => {\r\n    const player = createAudioPlayer();\r\n    const resource = createAudioResource(filePath);\r\n\r\n    player.play(resource);\r\n    connection.subscribe(player);\r\n\r\n    player.on(AudioPlayerStatus.Idle, () => fs.unlinkSync(filePath));\r\n  });\r\n\r\n  await message.react(aiUsed === 'Gemini' ? '🔷' : '🔊');\r\n  await message.reply(`**${aiUsed}:** ${text}`);\r\n}\r\n\r\nclient.on('messageCreate', async (message) => {\r\n  if (message.author.bot || !message.content || message.content.startsWith('!ai')) return;\r\n\r\n  try {\r\n    const recent = await message.channel.messages.fetch({ limit: 8 });\r\n    const sorted = filterMessages([...recent.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp));\r\n\r\n    let replyText, aiUsed = 'OpenAI';\r\n\r\n    try {\r\n      replyText = await getOpenAIResponse(sorted);\r\n    } catch (err) {\r\n      console.warn('⚠️ OpenAI failed, switching to Gemini:', err.message);\r\n      replyText = await getGeminiResponse(sorted);\r\n      aiUsed = 'Gemini';\r\n    }\r\n\r\n    await playResponse(replyText, message, aiUsed);\r\n  } catch (err) {\r\n    console.error('❌ Error:', err);\r\n    message.reply('Kuch gadbad ho gayi. Error: ' + err.message);\r\n  }\r\n});\r\n\r\nclient.login(process.env.DISCORD_TOKEN);\r\n\n```"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Okay, I see a Discord bot script written in JavaScript that uses both OpenAI and Gemini models to generate responses to user messages. It also has functionality to speak the response in a voice channel.\n\nHere's a breakdown of what the code does:\n\n*   **Initialization**: Sets up Discord client, OpenAI, and Gemini instances using API keys from the `.env` file.\n*   **Voice Channel Connection**: Connects to a specified voice channel on startup.\n*   **Message Filtering**: Filters out bot messages and commands to extract relevant user messages.\n*   **AI Response Generation**:\n    *   First, it attempts to get a response from OpenAI.\n    *   If OpenAI fails, it falls back to Gemini.\n*   **Text-to-Speech and Voice Playback**:\n    *   Converts the AI-generated text response to speech using `gTTS`.\n    *   Plays the audio in the connected voice channel.\n*   **Error Handling**: Includes error handling for API calls and voice channel operations.\n*   **Discord Event Handling**: Listens for new messages in the Discord server.\n*   **Message Reactions**: Reacts to the message with an emoji indicating which AI model was used to generate the response.\n\nIs there anything specific you'd like to know or any tasks you'd like me to perform related to this code? For example, are you looking to:\n\n*   Debug a specific issue?\n*   Understand a particular part of the code?\n*   Modify the code to add a new feature?\n"
+        }
+      ]
+    }
+  ],
+  "1361291925218656317": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hello! How can I help you today?\n"
+        }
+      ]
+    }
+  ],
+  "1361292057804673164": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "ICK-FURY-6023 ➜ /workspaces/Chat-GPT-4-Bot (Max) $ node .\n🟢 VAYU AI BOT is online! (Fallback: Gemini)\n✅ Voice channel connected.\n⚠️ OpenAI failed, switching to Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.\n❌ Error: ReferenceError: geminiModel is not defined\n    at getGeminiResponse (/workspaces/Chat-GPT-4-Bot/index.js:87:18)\n    at Client.<anonymous> (/workspaces/Chat-GPT-4-Bot/index.js:133:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Okay, I see the error. It looks like your OpenAI key is hitting a quota limit (429 error), which is causing the bot to fall back to Gemini. However, there's a `ReferenceError` because `geminiModel` is not defined within the `getGeminiResponse` function. It seems like you named your Gemini model `model` when you initialized it.\n\nHere's how to fix the issue:\n\n1.  **Rename `model` to `geminiModel` or use `model` in the `getGeminiResponse` function**: Choose one of these approaches for consistency.\n\nHere's the corrected `getGeminiResponse` function using the `model` variable:\n\n```javascript\nasync function getGeminiResponse(sortedMessages) {\n  const prompt = sortedMessages.map((msg) => `${msg.username}: ${msg.content}`).join('\\n');\n  const result = await model.generateContent({ // Changed geminiModel to model\n    contents: [\n      {\n        parts: [\n          {\n            text: `You're a funny, sarcastic assistant in a Discord server. Keep responses under 5 sentences.\\n\\n${prompt}\\n\\nAssistant:`\n          }\n        ]\n      }\n    ]\n  });\n\n  return (await result.response).text();\n}\n```\n\nMake this change in your `index.js` file, and the Gemini fallback should work correctly. After that, the bot should function using Gemini when OpenAI fails due to quota limits.\n"
+        }
+      ]
+    }
+  ],
+  "1361294920345976883": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "fix this code\n\n[`message.txt` File Content]:\n```\nrequire('dotenv').config();\r\nconst { Client, IntentsBitField } = require('discord.js');\r\nconst { OpenAI } = require('openai');\r\nconst { GoogleGenerativeAI } = require('@google/generative-ai');\r\nconst {\r\n  joinVoiceChannel,\r\n  createAudioPlayer,\r\n  createAudioResource,\r\n  AudioPlayerStatus,\r\n  VoiceConnectionStatus\r\n} = require('@discordjs/voice');\r\nconst fs = require('fs');\r\nconst gTTS = require('gtts');\r\nconst path = require('path');\r\n\r\n// Discord client setup\r\nconst client = new Client({\r\n  intents: [\r\n    IntentsBitField.Flags.Guilds,\r\n    IntentsBitField.Flags.GuildMessages,\r\n    IntentsBitField.Flags.MessageContent,\r\n    IntentsBitField.Flags.GuildVoiceStates\r\n  ],\r\n});\r\n\r\nconst openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });\r\nconst genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);\r\nconst model = genAI.getGenerativeModel({ model: \"gemini-2.0-flash\" });\r\n\r\n\r\nconst voiceChannelId = process.env.VOICE_CHANNEL_ID;\r\nlet connection;\r\n\r\nclient.once('ready', async () => {\r\n  console.log('🟢 VAYU AI BOT is online! (Fallback: Gemini)');\r\n  try {\r\n    const channel = await client.channels.fetch(voiceChannelId);\r\n    if (!channel || channel.type !== 2) throw new Error('❌ Invalid voice channel ID');\r\n\r\n    connection = joinVoiceChannel({\r\n      channelId: voiceChannelId,\r\n      guildId: channel.guild.id,\r\n      adapterCreator: channel.guild.voiceAdapterCreator,\r\n      selfDeaf: false\r\n    });\r\n\r\n    connection.on(VoiceConnectionStatus.Ready, () =>\r\n      console.log('✅ Voice channel connected.')\r\n    );\r\n  } catch (err) {\r\n    console.error('🔴 Voice channel error:', err.message);\r\n  }\r\n});\r\n\r\nconst filterMessages = (messages) =>\r\n  messages\r\n    .filter((msg) => !msg.author.bot && !msg.content.startsWith('!'))\r\n    .map((msg) => ({\r\n      role: msg.author.id === client.user.id ? 'assistant' : 'user',\r\n      content: msg.content,\r\n      username: msg.author.username\r\n    }));\r\n\r\nasync function getOpenAIResponse(sortedMessages) {\r\n  const conversation = [\r\n    {\r\n      role: 'system',\r\n      content: \"You're a funny, sarcastic Discord assistant. Keep replies under 5 sentences.\"\r\n    },\r\n    ...sortedMessages.map((msg) => ({\r\n      role: msg.role,\r\n      content: msg.content\r\n    }))\r\n  ];\r\n\r\n  const res = await openai.chat.completions.create({\r\n    model: 'gpt-3.5-turbo',\r\n    messages: conversation,\r\n    max_tokens: 200\r\n  });\r\n\r\n  return res.choices[0].message.content;\r\n}\r\n\r\nasync function getGeminiResponse(sortedMessages) {\r\n  const prompt = sortedMessages.map((msg) => `${msg.username}: ${msg.content}`).join('\\n');\r\n  const result = await geminiModel.generateContent({\r\n    contents: [\r\n      {\r\n        parts: [\r\n          {\r\n            text: `You're a funny, sarcastic assistant in a Discord server. Keep responses under 5 sentences.\\n\\n${prompt}\\n\\nAssistant:`\r\n          }\r\n        ]\r\n      }\r\n    ]\r\n  });\r\n\r\n  return (await result.response).text();\r\n}\r\n\r\nasync function playResponse(text, message, aiUsed) {\r\n  const filePath = path.join(__dirname, 'reply.mp3');\r\n  const tts = new gTTS(text, 'en');\r\n\r\n  tts.save(filePath, () => {\r\n    const player = createAudioPlayer();\r\n    const resource = createAudioResource(filePath);\r\n\r\n    player.play(resource);\r\n    connection.subscribe(player);\r\n\r\n    player.on(AudioPlayerStatus.Idle, () => fs.unlinkSync(filePath));\r\n  });\r\n\r\n  await message.react(aiUsed === 'Gemini' ? '🔷' : '🔊');\r\n  await message.reply(`**${aiUsed}:** ${text}`);\r\n}\r\n\r\nclient.on('messageCreate', async (message) => {\r\n  if (message.author.bot || !message.content || message.content.startsWith('!ai')) return;\r\n\r\n  try {\r\n    const recent = await message.channel.messages.fetch({ limit: 8 });\r\n    const sorted = filterMessages([...recent.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp));\r\n\r\n    let replyText, aiUsed = 'OpenAI';\r\n\r\n    try {\r\n      replyText = await getOpenAIResponse(sorted);\r\n    } catch (err) {\r\n      console.warn('⚠️ OpenAI failed, switching to Gemini:', err.message);\r\n      replyText = await getGeminiResponse(sorted);\r\n      aiUsed = 'Gemini';\r\n    }\r\n\r\n    await playResponse(replyText, message, aiUsed);\r\n  } catch (err) {\r\n    console.error('❌ Error:', err);\r\n    message.reply('Kuch gadbad ho gayi. Error: ' + err.message);\r\n  }\r\n});\r\n\r\nclient.login(process.env.DISCORD_TOKEN);\r\n\n```"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "```javascript\nrequire('dotenv').config();\nconst { Client, IntentsBitField } = require('discord.js');\nconst { OpenAI } = require('openai');\nconst { GoogleGenerativeAI } = require('@google/generative-ai');\nconst {\n  joinVoiceChannel,\n  createAudioPlayer,\n  createAudioResource,\n  AudioPlayerStatus,\n  VoiceConnectionStatus\n} = require('@discordjs/voice');\nconst fs = require('fs');\nconst gTTS = require('gTTS');\nconst path = require('path');\n\n// Discord client setup\nconst client = new Client({\n  intents: [\n    IntentsBitField.Flags.Guilds,\n    IntentsBitField.Flags.GuildMessages,\n    IntentsBitField.Flags.MessageContent,\n    IntentsBitField.Flags.GuildVoiceStates\n  ],\n});\n\nconst openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });\nconst genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);\nconst model = genAI.getGenerativeModel({ model: \"gemini-2.0-flash\" });\n\n\nconst voiceChannelId = process.env.VOICE_CHANNEL_ID;\nlet connection;\n\nclient.once('ready', async () => {\n  console.log('🟢 VAYU AI BOT is online! (Fallback: Gemini)');\n  try {\n    const channel = await client.channels.fetch(voiceChannelId);\n    if (!channel || channel.type !== 2) throw new Error('❌ Invalid voice channel ID');\n\n    connection = joinVoiceChannel({\n      channelId: voiceChannelId,\n      guildId: channel.guild.id,\n      adapterCreator: channel.guild.voiceAdapterCreator,\n      selfDeaf: false\n    });\n\n    connection.on(VoiceConnectionStatus.Ready, () =>\n      console.log('✅ Voice channel connected.')\n    );\n  } catch (err) {\n    console.error('🔴 Voice channel error:', err.message);\n  }\n});\n\nconst filterMessages = (messages) =>\n  messages\n    .filter((msg) => !msg.author.bot && !msg.content.startsWith('!'))\n    .map((msg) => ({\n      role: msg.author.id === client.user.id ? 'assistant' : 'user',\n      content: msg.content,\n      username: msg.author.username\n    }));\n\nasync function getOpenAIResponse(sortedMessages) {\n  const conversation = [\n    {\n      role: 'system',\n      content: \"You're a funny, sarcastic Discord assistant. Keep replies under 5 sentences.\"\n    },\n    ...sortedMessages.map((msg) => ({\n      role: msg.role,\n      content: msg.content\n    }))\n  ];\n\n  const res = await openai.chat.completions.create({\n    model: 'gpt-3.5-turbo',\n    messages: conversation,\n    max_tokens: 200\n  });\n\n  return res.choices[0].message.content;\n}\n\nasync function getGeminiResponse(sortedMessages) {\n  const prompt = sortedMessages.map((msg) => `${msg.username}: ${msg.content}`).join('\\n');\n  const result = await model.generateContent({\n    contents: [\n      {\n        parts: [\n          {\n            text: `You're a funny, sarcastic assistant in a Discord server. Keep responses under 5 sentences.\\n\\n${prompt}\\n\\nAssistant:`\n          }\n        ]\n      }\n    ]\n  });\n\n  return (await result.response).text();\n}\n\nasync function playResponse(text, message, aiUsed) {\n  const filePath = path.join(__dirname, 'reply.mp3');\n  const tts = new gTTS(text, 'en');\n\n  tts.save(filePath, () => {\n    const player = createAudioPlayer();\n    const resource = createAudioResource(filePath);\n\n    player.play(resource);\n    connection.subscribe(player);\n\n    player.on(AudioPlayerStatus.Idle, () => fs.unlinkSync(filePath));\n  });\n\n  await message.react(aiUsed === 'Gemini' ? '🔷' : '🔊');\n  await message.reply(`**${aiUsed}:** ${text}`);\n}\n\nclient.on('messageCreate', async (message) => {\n  if (message.author.bot || !message.content || message.content.startsWith('!ai')) return;\n\n  try {\n    const recent = await message.channel.messages.fetch({ limit: 8 });\n    const sorted = filterMessages([...recent.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp));\n\n    let replyText, aiUsed = 'OpenAI';\n\n    try {\n      replyText = await getOpenAIResponse(sorted);\n    } catch (err) {\n      console.warn('⚠️ OpenAI failed, switching to Gemini:', err.message);\n      replyText = await getGeminiResponse(sorted);\n      aiUsed = 'Gemini';\n    }\n\n    await playResponse(replyText, message, aiUsed);\n  } catch (err) {\n    console.error('❌ Error:', err);\n    message.reply('Kuch gadbad ho gayi. Error: ' + err.message);\n  }\n});\n\nclient.login(process.env.DISCORD_TOKEN);\n```\n\n**Reasoning:**\n\nThe error message `ReferenceError: geminiModel is not defined` indicates that the variable `geminiModel` was used without being declared or assigned a value.  In the original code, `const model = genAI.getGenerativeModel({ model: \"gemini-2.0-flash\" });` declares and initializes the Gemini model as `model`.  The `getGeminiResponse` function was incorrectly trying to use `geminiModel`.  The fix replaces `geminiModel` with `model` in the `getGeminiResponse` function, ensuring that the correct variable is used to access the Gemini model. This aligns the code with the intended logic and resolves the `ReferenceError`.\n"
+        }
+      ]
+    }
+  ],
+  "1361666725560455188": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hi there! How can I assist you today?\n"
+        }
+      ]
+    }
+  ],
+  "1361666864887103660": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Can you generate images for me"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "I can't directly generate images within this environment. However, I can provide you with prompts that you can use with other image generation tools like Midjourney, DALL-E, Stable Diffusion, or even online AI image generators.\n\nTell me what kind of image you'd like to create, and I'll give you a detailed prompt! The more specific you are, the better the result will be. For example, you could tell me:\n\n*   **Subject:** What is the main object or character in the image?\n*   **Style:** What art style do you want (e.g., photorealistic, cartoon, oil painting, cyberpunk)?\n*   **Setting:** Where does the scene take place?\n*   **Colors:** What colors should dominate the image?\n*   **Mood:** What feeling should the image evoke?\n\nI look forward to helping you create some amazing images!\n"
+        }
+      ]
+    }
+  ],
+  "1361683889034100847": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hello! What can I do for you today?\n"
+        }
+      ]
+    }
+  ],
+  "1361685492185301104": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "Hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hi! How can I help you?\n"
+        }
+      ]
+    }
+  ],
+  "1361685534136729641": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hello! How can I assist you today?\n"
+        }
+      ]
+    }
+  ],
+  "1361685817550045194": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "hey"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "Hi! What can I do for you today?\n"
+        }
+      ]
+    }
+  ]
+}
